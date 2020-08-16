@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-from .gilded_rose import Item, GildedRose, GeneralItem, AgedBrieItem, ConcertItem, LegendaryItem
+from .gilded_rose import Item, GildedRose, GeneralItem, AgedBrieItem, ConcertItem, LegendaryItem, ConjuredItem
 
 
 class GildedRoseTest(unittest.TestCase):
@@ -210,6 +210,91 @@ class ConcertItemTest(unittest.TestCase):
         gilded_rose.update_quality()
 
         self.assertEqual(item.sell_in, -1)
+        self.assertEqual(item.quality, 0)
+
+
+class ConjuredItemTest(unittest.TestCase):
+    def setUp(self):
+        self.items = []
+
+    def test_conjured_item_decrease_by_one(self):
+        self.items.append(
+            ConjuredItem(
+                name="ConjuredItemCaseNormal",
+                sell_in=10,
+                quality=20))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 9)
+        self.assertEqual(item.quality, 18)
+
+    def test_general_item_decrease_is_double(self):
+        self.items.append(
+            ConjuredItem(
+                name="ConjuredItemCaseDouble",
+                sell_in=0,
+                quality=20))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, -1)
+        self.assertEqual(item.quality, 16)
+
+    def test_general_item_quality_is_always_positive(self):
+        self.items.append(
+            ConjuredItem(
+                name="ConjuredItemAlwaysPositive",
+                sell_in=10,
+                quality=0))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 9)
+        self.assertEqual(item.quality, 0)
+
+    def test_general_item_quality_is_always_positive_when_quality_is_half_increment(self):
+        self.items.append(
+            ConjuredItem(
+                name="ConjuredItemAlwaysPositive",
+                sell_in=10,
+                quality=1))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 9)
+        self.assertEqual(item.quality, 0)
+
+    def test_general_item_quality_is_always_positive_when_quality_is_less_than_increment(self):
+        self.items.append(
+            ConjuredItem(
+                name="ConjuredItemAlwaysPositive",
+                sell_in=-1,
+                quality=3))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, -2)
         self.assertEqual(item.quality, 0)
 
 

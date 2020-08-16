@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+AGED_BRIE_NAME = 'Aged Brie'
+LEGENDARY_NAME = 'Sulfuras, Hand of Ragnaros'
+CONCERT_NAME = 'Backstage passes to a TAFKAL80ETC concert'
+CONJURED_NAME = 'Conjured Mana Cake'
+
 
 class GildedRose(object):
 
@@ -11,21 +16,28 @@ class GildedRose(object):
             if hasattr(item, 'update_item'):
                 item.update_item()
             else:
-                if item.name == 'Aged Brie':
+                if item.name == AGED_BRIE_NAME:
                     item = AgedBrieItem(
                         name=item.name,
                         sell_in=item.sell_in,
                         quality=item.quality
                     )
                     item.update_item()
-                elif item.name == 'Sulfuras, Hand of Ragnaros':
+                elif item.name == LEGENDARY_NAME:
                     item = LegendaryItem(
                         name=item.name,
                         sell_in=item.sell_in,
                     )
                     item.update_item()
-                elif item.name == 'Backstage passes to a TAFKAL80ETC concert':
+                elif item.name == CONCERT_NAME:
                     item = ConcertItem(
+                        name=item.name,
+                        sell_in=item.sell_in,
+                        quality=item.quality
+                    )
+                    item.update_item()
+                elif item.name == CONJURED_NAME:
+                    item = ConjuredItem(
                         name=item.name,
                         sell_in=item.sell_in,
                         quality=item.quality
@@ -107,4 +119,24 @@ class ConcertItem(Item):
     def update_sell_in(self):
         self.sell_in = self.sell_in - 1
         if self.sell_in < 0:
+            self.quality = 0
+
+
+class ConjuredItem(Item):
+
+    def update_item(self):
+        self.update_quality()
+        self.update_sell_in()
+
+    def update_quality(self):
+        if self.quality > 0:
+            self.quality = self.quality - 2
+        if self.quality < 0:
+            self.quality = 0
+
+    def update_sell_in(self):
+        self.sell_in = self.sell_in - 1
+        if self.sell_in < 0 and self.quality > 0:
+            self.quality = self.quality - 2
+        if self.quality < 0:
             self.quality = 0
