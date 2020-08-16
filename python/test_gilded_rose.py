@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-from .gilded_rose import Item, GildedRose, GeneralItem
+from .gilded_rose import Item, GildedRose, GeneralItem, AgedBrieItem, ConcertItem, LegendaryItem
 
 
 class GildedRoseTest(unittest.TestCase):
@@ -70,7 +70,7 @@ class AgedBrieItemTest(unittest.TestCase):
 
     def test_aged_brie_item_quality_increases(self):
         self.items.append(
-            Item(
+            AgedBrieItem(
                 name="Aged Brie",
                 sell_in=10,
                 quality=20))
@@ -86,7 +86,7 @@ class AgedBrieItemTest(unittest.TestCase):
 
     def test_aged_brie_item_quality_no_more_than_50(self):
         self.items.append(
-            Item(
+            AgedBrieItem(
                 name="Aged Brie",
                 sell_in=10,
                 quality=49))
@@ -103,7 +103,7 @@ class AgedBrieItemTest(unittest.TestCase):
 
     def test_aged_brie_item_quality_double_increase(self):
         self.items.append(
-            Item(
+            AgedBrieItem(
                 name="Aged Brie",
                 sell_in=1,
                 quality=20))
@@ -125,10 +125,9 @@ class LegendaryItemTest(unittest.TestCase):
 
     def test_legendary_item_quality_does_not_change(self):
         self.items.append(
-            Item(
+            LegendaryItem(
                 name="Sulfuras, Hand of Ragnaros",
-                sell_in=10,
-                quality=80))
+                sell_in=10))
 
         gilded_rose = GildedRose(self.items)
         gilded_rose.update_quality()
@@ -146,7 +145,7 @@ class ConcertItemTest(unittest.TestCase):
 
     def test_concert_item_quality_increases(self):
         self.items.append(
-            Item(
+            ConcertItem(
                 name="Backstage passes to a TAFKAL80ETC concert",
                 sell_in=15,
                 quality=20))
@@ -162,7 +161,7 @@ class ConcertItemTest(unittest.TestCase):
 
     def test_concert_item_quality_increases_by_two(self):
         self.items.append(
-            Item(
+            ConcertItem(
                 name="Backstage passes to a TAFKAL80ETC concert",
                 sell_in=10,
                 quality=20))
@@ -178,7 +177,7 @@ class ConcertItemTest(unittest.TestCase):
 
     def test_concert_item_quality_increases_by_three(self):
         self.items.append(
-            Item(
+            ConcertItem(
                 name="Backstage passes to a TAFKAL80ETC concert",
                 sell_in=5,
                 quality=20))
@@ -194,7 +193,7 @@ class ConcertItemTest(unittest.TestCase):
 
     def test_concert_item_quality_goes_to_zero_after_concert(self):
         self.items.append(
-            Item(
+            ConcertItem(
                 name="Backstage passes to a TAFKAL80ETC concert",
                 sell_in=1,
                 quality=20))

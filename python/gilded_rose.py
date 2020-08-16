@@ -5,7 +5,7 @@ class GildedRose(object):
     def __init__(self, items):
         self.items = items
 
-    def update_quality(self):
+    def update_quality_old(self):
         for item in self.items:
             if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
                 if item.quality > 0:
@@ -34,6 +34,40 @@ class GildedRose(object):
                 else:
                     if item.quality < 50:
                         item.quality = item.quality + 1
+
+    def update_quality(self):
+        for item in self.items:
+            # Until Convince Goblin to share ownership of Item Class
+            if hasattr(item, 'update_item'):
+                item.update_item()
+            else:
+                if item.name == 'Aged Brie':
+                    item = AgedBrieItem(
+                        name=item.name,
+                        sell_in=item.sell_in,
+                        quality=item.quality
+                    )
+                    item.update_item()
+                elif item.name == 'Sulfuras, Hand of Ragnaros':
+                    item = LegendaryItem(
+                        name=item.name,
+                        sell_in=item.sell_in,
+                    )
+                    item.update_item()
+                elif item.name == 'Backstage passes to a TAFKAL80ETC concert':
+                    item = ConcertItem(
+                        name=item.name,
+                        sell_in=item.sell_in,
+                        quality=item.quality
+                    )
+                    item.update_item()
+                else:
+                    item = GeneralItem(
+                        name=item.name,
+                        sell_in=item.sell_in,
+                        quality=item.quality
+                    )
+                    item.update_item()
 
 
 class Item:
