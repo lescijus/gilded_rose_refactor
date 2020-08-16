@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-from .gilded_rose import Item, GildedRose
+from .gilded_rose import Item, GildedRose, GeneralItem
 
 
 class GildedRoseTest(unittest.TestCase):
@@ -17,7 +17,7 @@ class GildedGeneralItem(unittest.TestCase):
 
     def test_general_item_decrease_by_one(self):
         self.items.append(
-            Item(
+            GeneralItem(
                 name="NormalItemCaseNormal",
                 sell_in=10,
                 quality=20))
@@ -33,7 +33,7 @@ class GildedGeneralItem(unittest.TestCase):
 
     def test_general_item_decrease_is_double(self):
         self.items.append(
-            Item(
+            GeneralItem(
                 name="NormalItemCaseDouble",
                 sell_in=0,
                 quality=20))
@@ -49,7 +49,7 @@ class GildedGeneralItem(unittest.TestCase):
 
     def test_general_item_quality_is_always_positive(self):
         self.items.append(
-            Item(
+            GeneralItem(
                 name="NormalItemCaseAlwaysPositive",
                 sell_in=10,
                 quality=0))
@@ -63,12 +63,17 @@ class GildedGeneralItem(unittest.TestCase):
         self.assertEqual(item.sell_in, 9)
         self.assertEqual(item.quality, 0)
 
-    def test_general_item_quality_is_always_positive2(self):
+
+class AgedBrieItem(unittest.TestCase):
+    def setUp(self):
+        self.items = []
+
+    def test_aged_brie_item_quality_increases(self):
         self.items.append(
             Item(
-                name="NormalItemCaseAlwaysPositive",
-                sell_in=0,
-                quality=1))
+                name="Aged Brie",
+                sell_in=10,
+                quality=20))
 
         gilded_rose = GildedRose(self.items)
         gilded_rose.update_quality()
@@ -76,8 +81,42 @@ class GildedGeneralItem(unittest.TestCase):
         self.assertEqual(len(self.items), 1)
         item = self.items[0]
 
+        self.assertEqual(item.sell_in, 9)
+        self.assertEqual(item.quality, 21)
+
+    def test_aged_brie_item_quality_no_more_than_50(self):
+        self.items.append(
+            Item(
+                name="Aged Brie",
+                sell_in=10,
+                quality=49))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 8)
+        self.assertEqual(item.quality, 50)
+
+    def test_aged_brie_item_quality_double_increase(self):
+        self.items.append(
+            Item(
+                name="Aged Brie",
+                sell_in=1,
+                quality=20))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
         self.assertEqual(item.sell_in, -1)
-        self.assertEqual(item.quality, 0)
+        self.assertEqual(item.quality, 23)
 
 
 if __name__ == '__main__':
