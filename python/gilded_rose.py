@@ -44,3 +44,19 @@ class Item:
 
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
+
+
+class GeneralItem(Item):
+
+    def update_item(self):
+        self.update_quality()
+        self.update_sell_in()
+
+    def update_quality(self):
+        if self.quality > 0:
+            self.quality = self.quality - 1
+
+    def update_sell_in(self):
+        self.sell_in = self.sell_in - 1
+        if self.sell_in < 0 and self.quality > 0:
+            self.quality = self.quality - 1
