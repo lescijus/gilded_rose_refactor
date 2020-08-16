@@ -11,7 +11,7 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual("foo", items[0].name)
 
 
-class GildedGeneralItem(unittest.TestCase):
+class GildedGeneralItemTest(unittest.TestCase):
     def setUp(self):
         self.items = []
 
@@ -64,7 +64,7 @@ class GildedGeneralItem(unittest.TestCase):
         self.assertEqual(item.quality, 0)
 
 
-class AgedBrieItem(unittest.TestCase):
+class AgedBrieItemTest(unittest.TestCase):
     def setUp(self):
         self.items = []
 
@@ -117,6 +117,101 @@ class AgedBrieItem(unittest.TestCase):
 
         self.assertEqual(item.sell_in, -1)
         self.assertEqual(item.quality, 23)
+
+
+class LegendaryItemTest(unittest.TestCase):
+    def setUp(self):
+        self.items = []
+
+    def test_legendary_item_quality_does_not_change(self):
+        self.items.append(
+            Item(
+                name="Sulfuras, Hand of Ragnaros",
+                sell_in=10,
+                quality=80))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 10)
+        self.assertEqual(item.quality, 80)
+
+
+class ConcertItemTest(unittest.TestCase):
+    def setUp(self):
+        self.items = []
+
+    def test_concert_item_quality_increases(self):
+        self.items.append(
+            Item(
+                name="Backstage passes to a TAFKAL80ETC concert",
+                sell_in=15,
+                quality=20))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 14)
+        self.assertEqual(item.quality, 21)
+
+    def test_concert_item_quality_increases_by_two(self):
+        self.items.append(
+            Item(
+                name="Backstage passes to a TAFKAL80ETC concert",
+                sell_in=10,
+                quality=20))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 9)
+        self.assertEqual(item.quality, 22)
+
+    def test_concert_item_quality_increases_by_three(self):
+        self.items.append(
+            Item(
+                name="Backstage passes to a TAFKAL80ETC concert",
+                sell_in=5,
+                quality=20))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 4)
+        self.assertEqual(item.quality, 23)
+
+    def test_concert_item_quality_goes_to_zero_after_concert(self):
+        self.items.append(
+            Item(
+                name="Backstage passes to a TAFKAL80ETC concert",
+                sell_in=1,
+                quality=20))
+
+        gilded_rose = GildedRose(self.items)
+        gilded_rose.update_quality()
+
+        self.assertEqual(len(self.items), 1)
+        item = self.items[0]
+
+        self.assertEqual(item.sell_in, 0)
+        self.assertEqual(item.quality, 23)
+
+        gilded_rose.update_quality()
+
+        self.assertEqual(item.sell_in, -1)
+        self.assertEqual(item.quality, 0)
 
 
 if __name__ == '__main__':
